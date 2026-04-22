@@ -49,7 +49,7 @@ rlhf-hf/
 - SFT: `{"instruction": "...", "response": "..."}`
 - Preference: `{"prompt": "...", "chosen": "...", "rejected": "..."}`
 
-See `/home/runner/work/RLHF-Native-Hugging-Face/RLHF-Native-Hugging-Face/data/schema.md`.
+See `data/schema.md`.
 
 ## Setup
 

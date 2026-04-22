@@ -1,5 +1,4 @@
 import argparse
-from pathlib import Path
 
 import yaml
 from transformers import TrainingArguments, set_seed
@@ -72,9 +71,6 @@ def main():
         with mlflow.start_run(run_name="sft"):
             mlflow.log_params({k: str(v) for k, v in cfg.items()})
             mlflow.log_artifacts(cfg["output_dir"], artifact_path="model")
-
-    Path(cfg["output_dir"]).mkdir(parents=True, exist_ok=True)
-
 
 if __name__ == "__main__":
     main()
