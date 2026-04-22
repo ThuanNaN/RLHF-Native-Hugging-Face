@@ -36,18 +36,26 @@ def build_lora_config(cfg: Dict, task_type: str = "CAUSAL_LM") -> Optional[LoraC
     )
 
 
-def load_causal_lm(model_name_or_path: str, use_4bit: bool = False):
+def load_causal_lm(
+    model_name_or_path: str,
+    use_4bit: bool = False,
+    trust_remote_code: bool = False,
+):
     quantization_config = maybe_quant_config(use_4bit)
-    model_kwargs = {"trust_remote_code": True}
+    model_kwargs = {"trust_remote_code": trust_remote_code}
     if quantization_config is not None:
         model_kwargs["quantization_config"] = quantization_config
         model_kwargs["device_map"] = "auto"
     return AutoModelForCausalLM.from_pretrained(model_name_or_path, **model_kwargs)
 
 
-def load_reward_model(model_name_or_path: str, use_4bit: bool = False):
+def load_reward_model(
+    model_name_or_path: str,
+    use_4bit: bool = False,
+    trust_remote_code: bool = False,
+):
     quantization_config = maybe_quant_config(use_4bit)
-    model_kwargs = {"trust_remote_code": True, "num_labels": 1}
+    model_kwargs = {"trust_remote_code": trust_remote_code, "num_labels": 1}
     if quantization_config is not None:
         model_kwargs["quantization_config"] = quantization_config
         model_kwargs["device_map"] = "auto"
