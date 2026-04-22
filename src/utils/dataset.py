@@ -45,7 +45,7 @@ def format_reward_dataset(dataset: Dataset) -> Dataset:
     return dataset.map(_format)
 
 
-def train_eval_split(dataset: Dataset, eval_size: float = 0.0, seed: int = 42) -> DatasetDict:
-    if eval_size <= 0:
+def train_eval_split(dataset: Dataset, eval_ratio: float = 0.0, seed: int = 42) -> DatasetDict:
+    if eval_ratio <= 0:
         return DatasetDict({"train": dataset})
-    return dataset.train_test_split(test_size=eval_size, seed=seed)
+    return dataset.train_test_split(test_size=eval_ratio, seed=seed)

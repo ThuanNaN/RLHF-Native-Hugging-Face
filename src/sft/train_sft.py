@@ -24,7 +24,7 @@ def main():
     tokenizer = load_tokenizer(cfg["tokenizer_name_or_path"])
     dataset = load_json_dataset(cfg["dataset_path"])
     dataset = format_sft_dataset(dataset)
-    split = train_eval_split(dataset, cfg.get("eval_size", 0.0), cfg.get("seed", 42))
+    split = train_eval_split(dataset, cfg.get("eval_ratio", cfg.get("eval_size", 0.0)), cfg.get("seed", 42))
 
     model = load_causal_lm(cfg["model_name_or_path"], use_4bit=cfg.get("use_4bit", False))
     if cfg.get("gradient_checkpointing", False):

@@ -39,14 +39,17 @@ def health():
 @app.post("/generate")
 def generate(request: GenerateRequest):
     inputs = tokenizer(request.prompt, return_tensors="pt").to(model_device)
+    do_sample = request.temperature > 0
+    generation_kwargs = {
+        "max_new_tokens": request.max_new_tokens,
+        "do_sample": do_sample,
+        "pad_token_id": tokenizer.pad_token_id,
+        "eos_token_id": tokenizer.eos_token_id,
+    }
+    if do_sample:
+        generation_kwargs["temperature"] = request.temperature
+
     with torch.no_grad():
-        output = model.generate(
-            **inputs,
-            max_new_tokens=request.max_new_tokens,
-            do_sample=request.temperature > 0,
-            temperature=max(request.temperature, 1e-5),
-            pad_token_id=tokenizer.pad_token_id,
-            eos_token_id=tokenizer.eos_token_id,
-        )
+        output = model.generate(**inputs, **generation_kwargs)
     text = tokenizer.decode(output[0], skip_special_tokens=True)
     return {"response": text}
