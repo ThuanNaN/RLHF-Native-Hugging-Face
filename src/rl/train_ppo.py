@@ -99,7 +99,12 @@ def main():
         response_tensors = ppo_trainer.generate(query_tensors, **generation_kwargs)
         responses = tokenizer.batch_decode(response_tensors, skip_special_tokens=True)
         rewards_raw = reward_pipe(responses)
-        rewards = [torch.tensor(float(item[0]["score"])) for item in rewards_raw]
+        rewards = [
+            torch.tensor(
+                float(item["score"] if isinstance(item, dict) else item[0]["score"])
+            )
+            for item in rewards_raw
+        ]
 
         stats = ppo_trainer.step(query_tensors, response_tensors, rewards)
         ppo_trainer.log_stats(stats, batch, rewards)
