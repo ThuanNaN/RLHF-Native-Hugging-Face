@@ -16,11 +16,13 @@ def load_model(model_path: str):
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     model = AutoModelForCausalLM.from_pretrained(model_path)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model.to(device)
     model.eval()
-    return tokenizer, model
+    return tokenizer, model, device
 
 
-tokenizer, model = load_model(MODEL_PATH)
+tokenizer, model, model_device = load_model(MODEL_PATH)
 
 
 class GenerateRequest(BaseModel):
@@ -36,10 +38,7 @@ def health():
 
 @app.post("/generate")
 def generate(request: GenerateRequest):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    model.to(device)
-
-    inputs = tokenizer(request.prompt, return_tensors="pt").to(device)
+    inputs = tokenizer(request.prompt, return_tensors="pt").to(model_device)
     with torch.no_grad():
         output = model.generate(
             **inputs,

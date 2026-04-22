@@ -25,6 +25,19 @@ def build_query_dataset(dataset: Dataset):
     return dataset.map(_map, remove_columns=dataset.column_names)
 
 
+def tokenize_queries(queries, tokenizer, max_input_length, device):
+    query_tensors = []
+    for query in queries:
+        encoded = tokenizer(
+            query,
+            return_tensors="pt",
+            truncation=True,
+            max_length=max_input_length,
+        )["input_ids"].squeeze(0)
+        query_tensors.append(encoded.to(device))
+    return query_tensors
+
+
 def main():
     args = parse_args()
     with open(args.config, "r", encoding="utf-8") as f:
@@ -77,7 +90,12 @@ def main():
         if step >= max_steps:
             break
 
-        query_tensors = [tokenizer(q, return_tensors="pt", truncation=True, max_length=cfg.get("max_input_length", 512))["input_ids"].squeeze(0).to(policy_model.pretrained_model.device) for q in batch["query"]]
+        query_tensors = tokenize_queries(
+            batch["query"],
+            tokenizer=tokenizer,
+            max_input_length=cfg.get("max_input_length", 512),
+            device=policy_model.pretrained_model.device,
+        )
         response_tensors = ppo_trainer.generate(query_tensors, **generation_kwargs)
         responses = tokenizer.batch_decode(response_tensors, skip_special_tokens=True)
         rewards_raw = reward_pipe(responses)
