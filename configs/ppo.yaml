@@ -1,0 +1,17 @@
+policy_model_name_or_path: TinyLlama/TinyLlama-1.1B-Chat-v1.0
+reference_model_name_or_path: TinyLlama/TinyLlama-1.1B-Chat-v1.0
+reward_model_name_or_path: outputs/reward_model
+tokenizer_name_or_path: TinyLlama/TinyLlama-1.1B-Chat-v1.0
+dataset_path: data/examples/sft.jsonl
+output_dir: outputs/ppo
+seed: 42
+
+learning_rate: 1.0e-6
+batch_size: 8
+mini_batch_size: 2
+gradient_accumulation_steps: 1
+ppo_epochs: 4
+max_new_tokens: 128
+max_input_length: 512
+max_ppo_steps: 20
+report_to: ["none"]

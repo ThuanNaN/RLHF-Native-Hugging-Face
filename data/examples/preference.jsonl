@@ -1,0 +1,2 @@
+{"prompt": "Summarize supervised fine-tuning.", "chosen": "Supervised fine-tuning teaches a model by minimizing loss on curated prompt-response pairs.", "rejected": "Fine-tuning is impossible."}
+{"prompt": "Why use preference data?", "chosen": "Preference data helps align model outputs with human judgments of quality.", "rejected": "Because random labels are better."}
