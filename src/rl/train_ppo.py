@@ -60,7 +60,14 @@ def main():
     )
 
     policy_model = AutoModelForCausalLMWithValueHead.from_pretrained(cfg["policy_model_name_or_path"])
-    ref_model = create_reference_model(policy_model)
+    reference_model_name_or_path = cfg.get("reference_model_name_or_path")
+    if reference_model_name_or_path:
+        ref_model = AutoModelForCausalLMWithValueHead.from_pretrained(reference_model_name_or_path)
+        ref_model.eval()
+        for param in ref_model.parameters():
+            param.requires_grad = False
+    else:
+        ref_model = create_reference_model(policy_model)
 
     ppo_trainer = PPOTrainer(
         config=ppo_config,
