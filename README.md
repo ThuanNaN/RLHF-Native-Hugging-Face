@@ -14,7 +14,6 @@ flowchart LR
     D --> F
     E --> G[HF Model Artifact]
     F --> G
-    G --> H[FastAPI Serving]
 ```
 
 ## Repository Layout
@@ -39,7 +38,6 @@ rlhf-hf/
 │   ├── rl/train_ppo.py
 │   └── utils/{dataset.py,model.py,collators.py}
 ├── scripts/{run_sft.sh,run_rm.sh,run_rl.sh}
-├── serving/fastapi_app.py
 ├── requirements.txt
 └── README.md
 ```
@@ -82,16 +80,6 @@ bash scripts/run_rl.sh dpo configs/dpo.yaml
 ```bash
 bash scripts/run_rl.sh ppo configs/ppo.yaml
 ```
-
-## Serving
-
-```bash
-MODEL_PATH=outputs/dpo uvicorn serving.fastapi_app:app --host 0.0.0.0 --port 8000
-```
-
-Endpoints:
-- `GET /health`
-- `POST /generate` with `{ "prompt": "..." }`
 
 ## OpenRLHF → Native HF Mapping
 
