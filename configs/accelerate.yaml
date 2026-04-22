@@ -1,0 +1,9 @@
+compute_environment: LOCAL_MACHINE
+distributed_type: MULTI_GPU
+num_machines: 1
+num_processes: 2
+mixed_precision: bf16
+machine_rank: 0
+main_training_function: main
+same_network: true
+downcast_bf16: 'no'

@@ -1,0 +1,2 @@
+{"instruction": "What is RLHF?", "response": "RLHF stands for Reinforcement Learning from Human Feedback."}
+{"instruction": "Give one benefit of LoRA.", "response": "LoRA reduces trainable parameters and lowers fine-tuning cost."}
